@@ -1,0 +1,12 @@
+streamlit
+langchain
+langchain-community
+langchain-chroma
+langchain-ollama
+chromadb
+youtube-transcript-api
+beautifulsoup4
+requests
+pyyaml
+ollama
+flask

@@ -1,0 +1,4 @@
+embedding_model: all-MiniLM-L6-v2
+generator_model: gemma:2b
+chunk_size: 1000
+chunk_overlap: 100
