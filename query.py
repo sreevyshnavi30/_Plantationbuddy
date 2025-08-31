@@ -1,4 +1,6 @@
 import argparse
+import chromadb
+from chromadb.config import Settings
 from langchain_chroma import Chroma
 from langchain_ollama import OllamaLLM, OllamaEmbeddings
 from langchain.chains import RetrievalQA
@@ -8,9 +10,16 @@ def run_query(query, persist="db", model="gemma:2b"):
     # Use Ollama embeddings (nomic-embed-text is lightweight & fast)
     embeddings = OllamaEmbeddings(model="nomic-embed-text")
 
-    # Load existing Chroma DB
+    # Create a safe Chroma client (file-based, works on Streamlit Cloud)
+    chroma_client = chromadb.Client(Settings(
+        chroma_db_impl="duckdb+parquet",
+        persist_directory=persist
+    ))
+
+    # Load existing Chroma DB with this client
     vectorstore = Chroma(
-        persist_directory=persist,
+        client=chroma_client,
+        collection_name="my_collection",
         embedding_function=embeddings
     )
 
@@ -59,3 +68,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
