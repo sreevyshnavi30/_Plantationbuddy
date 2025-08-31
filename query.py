@@ -1,5 +1,4 @@
 import argparse
-import chromadb
 from chromadb.config import Settings
 from langchain_chroma import Chroma
 from langchain_ollama import OllamaLLM, OllamaEmbeddings
@@ -68,4 +67,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
