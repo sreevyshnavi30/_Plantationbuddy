@@ -1,23 +1,21 @@
-# Use slim Python base
-FROM python:3.11-slim
+FROM python:3.10-slim
 
-# Set working directory
-WORKDIR /app
+# Install system dependencies
+RUN apt-get update && apt-get install -y curl git && rm -rf /var/lib/apt/lists/*
 
-# Copy requirements first (better layer caching)
+# Install Ollama
+RUN curl -fsSL https://ollama.com/install.sh | sh
+
+# Install Python dependencies
 COPY requirements.txt .
-
-# Install dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy rest of the app
-COPY . .
+# Copy app
+COPY . /app
+WORKDIR /app
 
-# Ensure Streamlit has a writable directory
-ENV STREAMLIT_CONFIG_DIR=/tmp/.streamlit
-ENV STREAMLIT_CACHE_DIR=/tmp/.streamlit-cache
-RUN mkdir -p /tmp/.streamlit /tmp/.streamlit-cache
+# Expose Streamlit
+EXPOSE 7860
 
-# Expose Streamlit port
-EXPOSE 8503
-CMD ["streamlit", "run", "app.py", "--server.port=8503", "--server.address=0.0.0.0"]
+# Run Streamlit
+CMD ["streamlit", "run", "app.py", "--server.port=7860", "--server.address=0.0.0.0"]
